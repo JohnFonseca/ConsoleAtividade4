@@ -36,7 +36,7 @@ void CSMain (uint3 id : SV_DispatchThreadID)
         velocidade = gravidade * Dt/2;//(forca / massa); // gravidade * 10
         Posicao = velocidade * Dt; // + posicao inicial
 
-    if (Posicao <= -PosColisao-.75)
+    if (Posicao <= -PosColisao-.5)
     {
         mover = 0;
         Result[id.x] = Posicao;

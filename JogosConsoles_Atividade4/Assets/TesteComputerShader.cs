@@ -140,8 +140,8 @@ public class TesteComputerShader : MonoBehaviour
             {
                 objetos[i].GetComponent<MeshRenderer>().material.SetColor("_Color", data[i].color);
                 corMudada[i] = 1;
-                print(objetos[i].GetComponent<MeshRenderer>().material.color);
-                tempoFinal = tempo[0];
+                //print(objetos[i].GetComponent<MeshRenderer>().material.color);
+                tempoFinal = Time.realtimeSinceStartup;
             }
 
         }
@@ -159,7 +159,7 @@ public class TesteComputerShader : MonoBehaviour
 
         Dt+=Time.deltaTime;
       //  print(colisao.transform.position.y);
-        if (Posicao >= colisao.transform.position.y+0.75)
+        if (Posicao >= colisao.transform.position.y+0.5)
         {
         //    print(Posicao + objetos[0].transform.position.y);
             for (int i = 0; i < objetos.Length; i++)
@@ -177,10 +177,11 @@ public class TesteComputerShader : MonoBehaviour
                 {
                     objetos[i].GetComponent<MeshRenderer>().material.SetColor("_Color", UnityEngine.Random.ColorHSV());
                     corMudada[i] = 1;
-                    print(objetos[i].GetComponent<MeshRenderer>().material.color);
-                    tempoFinal = Dt;
+                  //  print(objetos[i].GetComponent<MeshRenderer>().material.color);
+                    tempoFinal = Time.realtimeSinceStartup;
                 }
             }
+
         }
         posInicial = objetos[0].transform.position.y;
     }

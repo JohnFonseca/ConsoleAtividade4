@@ -1,0 +1,23 @@
+// Each #kernel tells which function to compile; you can have many kernels
+#pragma kernel CSMain
+
+/*   print 1 do shader, referente ao print 1 do c#
+RWStructuredBuffer<float> Result;
+
+float VariavelValor;
+[numthreads(10,1,1)]
+void CSMain (uint3 id : SV_DispatchThreadID)
+{
+
+    VariavelValor = 10;
+
+    Result[id.x] = VariavelValor;
+
+}
+*/
+
+[numthreads(1, 1, 1)]
+void CSMain(uint3 id : SV_DispatchThreadID)
+{
+
+}
