@@ -4,11 +4,18 @@ using UnityEngine;
 
 public class ArquivoParaPrints : MonoBehaviour
 {
+
+    public struct Cube
+    {
+        public Vector3 position;
+        public Color color;
+        public float tempo;
+    }
     [SerializeField] [Tooltip("true = CPU, false = GPU")] bool CPU;
     [SerializeField] ComputeShader computeShader;
     // [SerializeField] float gravidade;
     int shaderPos, shaderVelPos, shaderCores;
-    ComputeBuffer buffer, bufferTempo, bufferFinalizou;
+    ComputeBuffer buffer, bufferFinalizou;
     float[] valores;//, tempo;
     float[] tempo;
     int tempoPassado;
@@ -38,37 +45,29 @@ public class ArquivoParaPrints : MonoBehaviour
     }
     public void IniciarTeste()
     {
-        /*                  print 1
-        valores = new float[quantidade];
-        buffer = new ComputeBuffer(quantidade, 8);
-        shaderPos = computeShader.FindKernel("CSMain");
-        buffer.SetData(valores);
-        computeShader.SetFloat("VariavelValor", VariavelValor);
-        computeShader.SetBuffer(shaderPos, "Result", buffer);
-        computeShader.Dispatch(shaderPos, quantidade / 10, 1, 1);
-         */
-        buffer = new ComputeBuffer(quantidade, 8);
-        bufferTempo = new ComputeBuffer(quantidade, 8);
-        bufferFinalizou = new ComputeBuffer(quantidade, 8);
+        //     inicializadorComum();
+        // buffer = new ComputeBuffer(quantidade, 8);
+        //  bufferTempo = new ComputeBuffer(quantidade, 8);
+        //  bufferFinalizou = new ComputeBuffer(quantidade, 8);
 
-        shaderPos = computeShader.FindKernel("CSMain");
-        shaderVelPos = computeShader.FindKernel("velShare");
+        //   shaderPos = computeShader.FindKernel("CSMain");
+        //    shaderVelPos = computeShader.FindKernel("velShare");
         shaderCores = computeShader.FindKernel("Cores");
-      
-        buffer.SetData(valores);
-        bufferFinalizou.SetData(finalizou);
-      
+        //   print(shaderCores + " ----- ");
+        //  buffer.SetData(valores);
+        //   bufferFinalizou.SetData(finalizou);
+        //    computeShader.SetFloat("gravidade", gravidade);
 
         computeShader.SetFloat("massa", UnityEngine.Random.Range(massaMin, MassaMax));
         computeShader.SetFloat("Dt", tempoPassado);
-        computeShader.SetBuffer(shaderPos, "Result", buffer);
-        computeShader.SetBuffer(shaderVelPos, "tempo", bufferTempo);
-        computeShader.SetBuffer(shaderPos, "finalizou", bufferFinalizou);
-        // computeShader.SetBuffer(shaderCores,"cubes", data);
-        computeShader.Dispatch(shaderPos, quantidade / 10, 1, 1);
-        computeShader.SetFloat("PosColisao", colisao.transform.position.y);
-        print(colisao.transform.position.y);
-        buffer.GetData(valores);
+        //  computeShader.SetBuffer(shaderPos, "Result", buffer);
+        //   computeShader.SetBuffer(shaderVelPos, "tempo", bufferTempo);
+        //  computeShader.SetBuffer(shaderPos, "finalizou", bufferFinalizou);
+
+        //   computeShader.Dispatch(shaderPos, quantidade/10, 1, 1);
+        //   computeShader.SetFloat("PosColisao", colisao.transform.position.y);
+        //   print(colisao.transform.position.y);
+        //   buffer.GetData(valores);
         //print(buffer.count);
         //   buffer.Dispose();
         //  computeShader.SetBuffer(shaderCores, "cubes", data);
@@ -97,31 +96,26 @@ public class ArquivoParaPrints : MonoBehaviour
 
     private void ControleDeVelocidade()
     {
-
-
-        bufferTempo.SetData(tempo);
-        computeShader.Dispatch(shaderPos, quantidade / 10, 1, 1);
-        computeShader.Dispatch(shaderVelPos, quantidade / 10, 1, 1);
-        bufferTempo.GetData(tempo);
-        buffer.GetData(valores);
+        //     bufferTempo.SetData(tempo);
+        //    computeShader.Dispatch(shaderPos, quantidade/10, 1, 1);
+        // computeShader.Dispatch(shaderVelPos, quantidade/10, 1, 1);
+        //  bufferTempo.GetData(tempo);
+        //   buffer.GetData(valores);
         //  print(tempo[0]);
-        computeShader.SetFloat("Dt", Time.deltaTime + tempo[0]);
-
-
-        bufferFinalizou.GetData(finalizou);
+        //   bufferFinalizou.GetData(finalizou);
 
         ProfessorGPU();
-
     }
 
     private void ProfessorGPU() //random gpu
     {
-        int totalSize = sizeof(float) * 3 + sizeof(float) * 4;
+        int totalSize = sizeof(float) * 3 + sizeof(float) * 4 + sizeof(float);
 
         ComputeBuffer computeBuffer = new ComputeBuffer(data.Length, totalSize);
         computeBuffer.SetData(data);
-
+        computeShader.SetFloat("Dt", Time.deltaTime);
         computeShader.SetBuffer(shaderCores, "cubes", computeBuffer);
+        //  computeShader.SetBuffer(shaderVelPos, "cubes", computeBuffer);
         computeShader.SetInt("interactions", interactions);
         computeShader.Dispatch(shaderCores, data.Length / 10, 1, 1);
 
@@ -129,15 +123,23 @@ public class ArquivoParaPrints : MonoBehaviour
 
         for (int i = 0; i < objetos.Length; i++)
         {
-            if (corMudada[i] == 0)
-                objetos[i].transform.position = new Vector3(objetos[i].transform.position.x, -valores[i], objetos[i].transform.position.z);
-            if (finalizou[i] == 1 && corMudada[i] == 0)
+            //if (corMudada[i] == 0)
+            if (data[i].position.y - 0.25 > colisao.transform.position.y)
+                objetos[i].transform.position = new Vector3(objetos[i].transform.position.x, data[i].position.y, objetos[i].transform.position.z);
+
+            if (data[i].position.y - 0.25 <= colisao.transform.position.y && finalizou[i] == 0)
             {
                 objetos[i].GetComponent<MeshRenderer>().material.SetColor("_Color", data[i].color);
-                corMudada[i] = 1;
-                print(objetos[i].GetComponent<MeshRenderer>().material.color);
-                tempoFinal = tempo[0];
+                tempoFinal = Time.realtimeSinceStartup;
+                finalizou[i] = 1;
             }
+            /*  if (finalizou[i] == 1 && corMudada[i]==0)
+              {
+
+                  corMudada[i] = 1;
+                  //print(objetos[i].GetComponent<MeshRenderer>().material.color);
+
+              }*/
 
         }
         computeBuffer.Dispose();
@@ -154,7 +156,7 @@ public class ArquivoParaPrints : MonoBehaviour
 
         Dt += Time.deltaTime;
         //  print(colisao.transform.position.y);
-        if (Posicao >= colisao.transform.position.y + 0.75)
+        if (Posicao >= colisao.transform.position.y + 0.5)
         {
             //    print(Posicao + objetos[0].transform.position.y);
             for (int i = 0; i < objetos.Length; i++)
@@ -172,10 +174,11 @@ public class ArquivoParaPrints : MonoBehaviour
                 {
                     objetos[i].GetComponent<MeshRenderer>().material.SetColor("_Color", UnityEngine.Random.ColorHSV());
                     corMudada[i] = 1;
-                    print(objetos[i].GetComponent<MeshRenderer>().material.color);
-                    tempoFinal = Dt;
+                    //  print(objetos[i].GetComponent<MeshRenderer>().material.color);
+                    tempoFinal = Time.realtimeSinceStartup;
                 }
             }
+
         }
         posInicial = objetos[0].transform.position.y;
     }
@@ -201,23 +204,22 @@ public class ArquivoParaPrints : MonoBehaviour
             data[i] = new Cube();
             data[i].position = go.transform.position;
             data[i].color = _colorInic;
+
+            //  data[i * counts + k] = new Cube();
+            //  data[i * counts + k].position = go.transform.position;
+            // data[i * counts + k].color = _colorInic;
+            //  }
         }
     }
     private void OnDestroy()
     {
         if (CPU == false)
         {
-            buffer.Release();
-            bufferTempo.Release();
-            bufferFinalizou.Release();
+            // buffer.Release();
+            //  bufferTempo.Release();
+            //  bufferFinalizou.Release();
         }
     }
 }
 
-/*[System.Serializable]
-public struct Cube
-{
-    public Vector3 position;
-    public Color color;
-}
-*/
+

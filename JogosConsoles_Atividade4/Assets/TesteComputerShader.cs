@@ -5,6 +5,12 @@ using UnityEngine;
 
 public class TesteComputerShader : MonoBehaviour
 {
+
+    public struct Cube
+    {
+        public Vector3 position;
+        public Color color;
+    }
     [SerializeField] [Tooltip("true = CPU, false = GPU")] bool CPU;
     [SerializeField] ComputeShader computeShader;
    // [SerializeField] float gravidade;
@@ -140,7 +146,7 @@ public class TesteComputerShader : MonoBehaviour
             {
                 objetos[i].GetComponent<MeshRenderer>().material.SetColor("_Color", data[i].color);
                 corMudada[i] = 1;
-                //print(objetos[i].GetComponent<MeshRenderer>().material.color);
+                print(objetos[i].GetComponent<MeshRenderer>().material.color);
                 tempoFinal = Time.realtimeSinceStartup;
             }
 
@@ -159,7 +165,7 @@ public class TesteComputerShader : MonoBehaviour
 
         Dt+=Time.deltaTime;
       //  print(colisao.transform.position.y);
-        if (Posicao >= colisao.transform.position.y+0.5)
+        if (Posicao >= colisao.transform.position.y+0.75)
         {
         //    print(Posicao + objetos[0].transform.position.y);
             for (int i = 0; i < objetos.Length; i++)
@@ -177,11 +183,10 @@ public class TesteComputerShader : MonoBehaviour
                 {
                     objetos[i].GetComponent<MeshRenderer>().material.SetColor("_Color", UnityEngine.Random.ColorHSV());
                     corMudada[i] = 1;
-                  //  print(objetos[i].GetComponent<MeshRenderer>().material.color);
+                    print(objetos[i].GetComponent<MeshRenderer>().material.color);
                     tempoFinal = Time.realtimeSinceStartup;
                 }
             }
-
         }
         posInicial = objetos[0].transform.position.y;
     }
@@ -225,9 +230,5 @@ public class TesteComputerShader : MonoBehaviour
     }
 }
 
-[System.Serializable]
-public struct Cube
-{
-    public Vector3 position;
-    public Color color;
-}
+/*[System.Serializable]
+*/

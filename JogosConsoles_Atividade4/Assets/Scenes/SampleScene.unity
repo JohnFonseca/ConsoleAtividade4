@@ -404,6 +404,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1293603075}
   - component: {fileID: 1293603074}
+  - component: {fileID: 1293603076}
   m_Layer: 0
   m_Name: GameObject
   m_TagString: Untagged
@@ -423,14 +424,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd208e103a1268647a272d9ef3fe392f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CPU: 0
+  CPU: 1
   computeShader: {fileID: 7200000, guid: 21c7e9179bdd9244dbd9f1b68707b884, type: 3}
   massaMin: 1
   MassaMax: 50
   colisao: {fileID: 367388032}
   modelPref: {fileID: 5821747666803572379, guid: 65f5994e90fe7c244b6d6d5d9961e89c, type: 3}
   interactions: 100
-  quantidade: 100
+  quantidade: 50000
   tempoFinal: 0
 --- !u!4 &1293603075
 Transform:
@@ -446,3 +447,24 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1293603076
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1293603073}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02faf6c9bb600674aba8c6748a13cf0f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CPU: 0
+  computeShader: {fileID: 7200000, guid: df9f7871b47e8fa46a953053c7657ce8, type: 3}
+  massaMin: 1
+  MassaMax: 50
+  colisao: {fileID: 367388032}
+  modelPref: {fileID: 5821747666803572379, guid: 65f5994e90fe7c244b6d6d5d9961e89c, type: 3}
+  interactions: 100
+  quantidade: 50000
+  tempoFinal: 0
